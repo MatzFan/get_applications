@@ -6,7 +6,7 @@ apps_json =`curl -s -X POST -H "Content-Type: application/json" -d '{"URL":"http
 my_hash = JSON.parse(apps_json)
 array = my_hash['MapMarkerArray']
 apps_array = array.join('').split('href=https://www.mygov.je//Planning/Pages/PlanningApplicationDetail.aspx?s=1&amp;r=')
-apps = apps_array[1..10].map { |app| app.split('>')[0]}.join('|')
+apps = apps_array[1..10].map { |app| app.split('>')[0]}.join("\n")
 
 get '/' do
   apps
