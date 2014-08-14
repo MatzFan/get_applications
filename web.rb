@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'date'
 require 'json'
+require './scraper'
 
 DELIM = 'href=https://www.mygov.je//Planning/Pages/PlanningApplicationDetail.aspx?s=1&amp;r='
 CURL = 'curl -s -X POST -H "Content-Type: application/json" -d '
@@ -26,4 +27,8 @@ end
 
 get '/' do
   latest_app_num
+end
+
+get '/refs' do
+  Scraper.new.get_search_page
 end
