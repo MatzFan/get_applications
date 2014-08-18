@@ -22,4 +22,11 @@ describe Scraper do
     end
   end
 
+  context "#latest_app_num" do
+    specify "should return the number of applications for the given year" do
+      expect(scraper.latest_app_num).to eq(1848)
+    end
+  end
+
+
 end # of describe

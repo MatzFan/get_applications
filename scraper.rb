@@ -32,8 +32,8 @@ class Scraper
   end
 
   def latest_app_num
-    arr = JSON.parse(page_source_json(page_num))['MapMarkerArray'].split(DELIM)
-    arr[1..-1].map { |app| app.split('>')[0].split('/')[2].to_i}.sort.last.to_s
+    arr = JSON.parse(page_source_json(page_num))[RESULT].split(DELIM)
+    arr[1..-1].map { |e| e.split('">')[0].split('/')[2].to_i}.sort.last
   end
 
   def page_source_json(page_num)
