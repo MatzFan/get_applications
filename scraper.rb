@@ -10,15 +10,22 @@ class Scraper
   URL = 'https://www.mygov.je/_layouts/PlanningAjaxServices/PlanningSearch.svc/Search'
   ARRAY = 'MapMarkerArray'
 
-  attr_reader :year, :page_num
+  attr_reader :year, :page_num, :params
 
   def initialize(year)
     @year = year.to_s
     @page_num = 1
+    @params = PARAMS1 + page_num.to_s + PARAMS2
   end
 
   def num_apps
-    JSON.parse(page_json(1))['HeaderHTML'].split[8]
+    JSON.parse(page_source_json(1))['HeaderHTML'].split[8].to_i
+  end
+
+  def app_refs_on_page(page_num)
+    JSON.parse(page_source_json(page_num))[ARRAY].join('').split(DELIM)[1..10].map { |app| app.split('>')[0] }.join('|')
+    # apps = JSON.parse(page_source_json(page_num))[ARRAY].join('').split(DELIM)
+    # apps[1..10].map { |app| app.split('>')[0] }
   end
 
   def date_params
@@ -30,16 +37,14 @@ class Scraper
   end
 
   def latest_app_num
-    apps_json = page_json(page_num)
-    array = JSON.parse(apps_json)[ARRAY]
-    apps_array = array.join('').split(DELIM)
+    JSON.parse(page_source_json(page_num))[ARRAY].join('').split(DELIM)[1..10].map { |app| app.split('>')[0] }.join('|')
     # app_nums = apps_array[1..10].map {|app| app.split('>')[0].split('/')[2].to_i}
     # app_nums.sort.last.to_s
   end
 
-  def page_json(page_num)
-    curl_command = CURL + "'" + PARAMS1 + page_num.to_s + PARAMS2 + date_params + "' " + URL
-    `#{curl_command}`
+  def page_source_json(page_num)
+    curl = CURL + "'" + params + date_params + "' " + URL
+    `#{curl}`
   end
 
 end
