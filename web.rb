@@ -2,7 +2,7 @@ require 'sinatra'
 require './scraper'
 
 get '/' do
-  Scraper.new(2014).latest_app_num
+  Scraper.new(2014).latest_app_num.to_s
 end
 
 get '/num_apps_for' do
