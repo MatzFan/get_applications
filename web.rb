@@ -10,7 +10,3 @@ get '/app_refs_for' do
   page_num = params[:page_num]
   Scraper.new(year).app_refs_on_page(page_num)
 end
-
-# get '/refs' do
-#   Scraper.new.get_search_page
-# end
