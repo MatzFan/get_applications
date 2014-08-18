@@ -15,7 +15,6 @@ class Scraper
   def initialize(year)
     @year = year.to_s
     @page_num = 1
-    @params = PARAMS1 + page_num.to_s + PARAMS2
   end
 
   def num_apps
@@ -37,12 +36,12 @@ class Scraper
   end
 
   def latest_app_num
-    JSON.parse(page_source_json(page_num))[ARRAY].join('').split(DELIM)[1..10].map { |app| app.split('>')[0] }.join('|')
-    # app_nums = apps_array[1..10].map {|app| app.split('>')[0].split('/')[2].to_i}
-    # app_nums.sort.last.to_s
+    app_nums = JSON.parse(page_source_json(page_num))[ARRAY].join('').split(DELIM)[1..10].map { |app| app.split('>')[0].split('/')[2].to_i}
+    app_nums.sort.last.to_s
   end
 
   def page_source_json(page_num)
+    params = PARAMS1 + page_num.to_s + PARAMS2
     curl = CURL + "'" + params + date_params + "' " + URL
     `#{curl}`
   end
