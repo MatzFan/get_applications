@@ -18,6 +18,7 @@ describe Scraper do
     specify "should return list of application references on the given page" do
       expect(scraper.app_refs_on_page(1)).to eq(app_refs1)
       expect(scraper.app_refs_on_page(2)).to eq(app_refs2)
+      expect(Scraper.new(1987).app_refs_on_page(1)).to eq('P/1987/0038')
     end
   end
 

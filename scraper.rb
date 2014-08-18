@@ -3,12 +3,13 @@ require 'json'
 
 class Scraper
 
-  DELIM = 'href=https://www.mygov.je//Planning/Pages/PlanningApplicationDetail.aspx?s=1&amp;r='
+  DELIM = 'href="https://www.mygov.je//Planning/Pages/PlanningApplicationDetail.aspx?s=1&amp;r='
   CURL = 'curl -s -X POST -H "Content-Type: application/json" -d '
   P1 = '{"URL":"https://www.mygov.je//Planning/Pages/Planning.aspx","CommonParameters":"|05|'
   P2 = '||||","SearchParameters":"|1301||||0|All|All|'
   URL = 'https://www.mygov.je/_layouts/PlanningAjaxServices/PlanningSearch.svc/Search'
-  ARRAY = 'MapMarkerArray'
+  HEADER = 'HeaderHTML'
+  RESULT = 'ResultHTML'
 
   attr_reader :year, :page_num, :params
 
@@ -18,12 +19,12 @@ class Scraper
   end
 
   def num_apps
-    JSON.parse(page_source_json(1))['HeaderHTML'].split[8].to_i
+    JSON.parse(page_source_json(1))[HEADER].split[8].to_i
   end
 
   def app_refs_on_page(page_num)
-    arr = JSON.parse(page_source_json(page_num))[ARRAY].join('').split(DELIM)
-    arr[1..10].map { |app| app.split('>')[0] }.join('|')
+    arr = JSON.parse(page_source_json(page_num))[RESULT].split(DELIM)
+    arr[1..-1].map { |e| e.split('">')[0] }.uniq.join('|')
   end
 
   def date_params
@@ -31,8 +32,8 @@ class Scraper
   end
 
   def latest_app_num
-    arr = JSON.parse(page_source_json(page_num))[ARRAY].join('').split(DELIM)
-    arr[1..10].map { |app| app.split('>')[0].split('/')[2].to_i}.sort.last.to_s
+    arr = JSON.parse(page_source_json(page_num))['MapMarkerArray'].split(DELIM)
+    arr[1..-1].map { |app| app.split('>')[0].split('/')[2].to_i}.sort.last.to_s
   end
 
   def page_source_json(page_num)
