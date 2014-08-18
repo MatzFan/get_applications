@@ -1,37 +1,45 @@
-require 'watir'
-require 'phantomjs'
+require 'date'
+require 'json'
 
 class Scraper
 
-  URL = 'https://www.mygov.je/Planning/Pages/planning.aspx'
-  SEARCH_BUTTON = 'ctl00$SPWebPartManager1$g_717cf524_fe11_474e_b9ab_cc818a5fede9$ctl00$btnPlanningApplicationSearchSubmitAjax'
+  DELIM = 'href=https://www.mygov.je//Planning/Pages/PlanningApplicationDetail.aspx?s=1&amp;r='
+  CURL = 'curl -s -X POST -H "Content-Type: application/json" -d '
+  PARAMS1 = '{"URL":"https://www.mygov.je//Planning/Pages/Planning.aspx","CommonParameters":"|05|'
+  PARAMS2 = '||||","SearchParameters":"|1301||||0|All|All|'
+  URL = 'https://www.mygov.je/_layouts/PlanningAjaxServices/PlanningSearch.svc/Search'
+  ARRAY = 'MapMarkerArray'
 
-  attr_reader :browser
+  attr_reader :year, :page_num
 
-  def initialize
-    @browser = Watir::Browser.new :phantomjs
+  def initialize(year)
+    @year = year.to_s
+    @page_num = 1
   end
 
-  def get_search_page
-    browser.goto URL
-    browser.button(name: SEARCH_BUTTON).click
-    parse_app_refs
+  def num_apps
+    JSON.parse(page_json(1))['HeaderHTML'].split[8]
   end
 
-  def next_page
-    browser.button(id: 'NextButtonTop').click
+  def date_params
+    now = Date.parse(Time.now.to_s)
+    start = '01|01|' + year
+    _end = '31|12|' + year
+    # _end = now.strftime("%d|%m|" + year)
+    start + '|' + _end + '"}'
   end
 
-  def parse_table
-   browser.table(id: 'planningResult').wait_until_present
-   browser.table(id: 'planningResult').html
+  def latest_app_num
+    apps_json = page_json(page_num)
+    array = JSON.parse(apps_json)[ARRAY]
+    apps_array = array.join('').split(DELIM)
+    # app_nums = apps_array[1..10].map {|app| app.split('>')[0].split('/')[2].to_i}
+    # app_nums.sort.last.to_s
   end
 
-  def parse_app_refs
-    a = parse_table.split('a href="').select.each_with_index {|str, i| i.even?}
-    links = a[1..a.size].map { |e| e.split('?s=1&amp;r=')[1] }
-    array = links.map { |e| e.split('"').first }
-    array.join("\n")
+  def page_json(page_num)
+    curl_command = CURL + "'" + PARAMS1 + page_num.to_s + PARAMS2 + date_params + "' " + URL
+    `#{curl_command}`
   end
 
 end
