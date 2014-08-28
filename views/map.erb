@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html>
+
+  <head>
+    <%= include_gon %>
+
+    <title></title>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+
+    <script type='text/javascript' src='https://code.jquery.com/jquery-latest.min.js'></script>
+
+    <script type='text/javascript' src='http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0'></script>
+
+    <script type='text/javascript'>
+
+      function GetMap(plot_locations, plot_descriptions)
+      {
+        var mapOptions = {
+          credentials:'AutjcX00ethCZF2CQURexruteEwuFxvWJ6BVywEvyDv5BIaOO3vfhrH59O_rnLFd',
+          center: new Microsoft.Maps.Location(49.21042016382462, -2.1445659365234615),
+          zoom: 12,
+          mapTypeId: Microsoft.Maps.MapTypeId.aerial
+        };
+        var map = new Microsoft.Maps.Map(document.getElementById('mapDiv'), mapOptions);
+        for (var i=0,  len=plot_locations.length; i < len; i++) {
+          var lat = plot_locations[i][0];
+          var lng = plot_locations[i][1];
+          var loc = new Microsoft.Maps.Location(lat, lng);
+          var desc = plot_descriptions[i];
+          var pushpinOptions = {icon: 'https://www.google.com/mapfiles/ms/micons/' + desc + '.png', text: 'A', textOffset: new Microsoft.Maps.Point(3, 3)};
+          var pin = new Microsoft.Maps.Pushpin(loc, pushpinOptions);
+          pin.Title = 'Title';
+          pin.Description = desc;
+          pinInfobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), {visible: false });
+          // Add handlers
+          Microsoft.Maps.Events.addHandler(pin, 'click', displayInfobox);
+          Microsoft.Maps.Events.addHandler(map, 'viewchange', hideInfobox);
+          map.entities.push(pin);
+          map.entities.push(pinInfobox);
+        }
+
+        function displayInfobox(e) {
+          pinInfobox.setOptions({title: e.target.Title, description: e.target.Description, visible:true, offset: new Microsoft.Maps.Point(0,15)});
+          pinInfobox.setLocation(e.target.getLocation());
+        }
+
+        function hideInfobox(e)
+        {
+          pinInfobox.setOptions({ visible: false });
+        }
+      }
+
+    </script>
+  </head>
+
+  <body>
+
+    <script type='text/javascript'>
+      window.onload = function() {
+        var serverLocations = gon.plot_locations;
+        var serverDescriptions = gon.plot_descriptions;
+        GetMap(serverLocations, serverDescriptions);
+      };
+    </script>
+
+    <div id='mapDiv' style='position:absolute; width:800px; height:500px;'></div>
+
+  </body>
+
+</html>

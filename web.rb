@@ -1,6 +1,9 @@
 require 'sinatra'
+require 'gon-sinatra'
 require './scraper'
 require './mechanizer'
+
+Sinatra::register Gon::Sinatra
 
 get '/' do
   Scraper.new(2014).latest_app_num.to_s
@@ -21,4 +24,10 @@ get '/location_plan' do
   content_type 'application/pdf'
   app_ref = params[:ref]
   File.open(Mechanizer.new(app_ref).get_pdf.save)
+end
+
+get '/map' do
+  gon.plot_locations = [[49.178609, -2.224561],[49.179508, -2.225726], [49.199063, -2.111496]]
+  gon.plot_descriptions = ['green', 'red', 'orange']
+  erb :map
 end
