@@ -5,7 +5,7 @@
     <%= include_gon %>
 
     <title></title>
-    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+    <!--<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
 
     <script type='text/javascript' src='https://code.jquery.com/jquery-latest.min.js'></script>
 
@@ -22,46 +22,46 @@
           mapTypeId: Microsoft.Maps.MapTypeId.aerial
         };
         var map = new Microsoft.Maps.Map(document.getElementById('mapDiv'), mapOptions);
-        for (var i=0,  len=plot_locations.length; i < len; i++) {
-          var lat = plot_locations[i][0];
-          var lng = plot_locations[i][1];
-          var loc = new Microsoft.Maps.Location(lat, lng);
-          var desc = plot_descriptions[i];
-          var pushpinOptions = {icon: 'https://www.google.com/mapfiles/ms/micons/' + desc + '.png', text: 'A', textOffset: new Microsoft.Maps.Point(3, 3)};
-          var pin = new Microsoft.Maps.Pushpin(loc, pushpinOptions);
-          pin.Title = 'Title';
-          pin.Description = desc;
-          pinInfobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), {visible: false });
-          // Add handlers
-          Microsoft.Maps.Events.addHandler(pin, 'click', displayInfobox);
-          Microsoft.Maps.Events.addHandler(map, 'viewchange', hideInfobox);
-          map.entities.push(pin);
-          map.entities.push(pinInfobox);
-        }
+        // for (var i=0,  len=plot_locations.length; i < len; i++) {
+        //   var lat = plot_locations[i][0];
+        //   var lng = plot_locations[i][1];
+        //   var loc = new Microsoft.Maps.Location(lat, lng);
+        //   var desc = plot_descriptions[i];
+        //   var pushpinOptions = {icon: 'https://www.google.com/mapfiles/ms/micons/' + desc + '.png', text: 'A', textOffset: new Microsoft.Maps.Point(3, 3)};
+        //   var pin = new Microsoft.Maps.Pushpin(loc, pushpinOptions);
+        //   pin.Title = 'Title';
+        //   pin.Description = desc;
+        //   pinInfobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), {visible: false });
+        //   // Add handlers
+        //   Microsoft.Maps.Events.addHandler(pin, 'click', displayInfobox);
+        //   Microsoft.Maps.Events.addHandler(map, 'viewchange', hideInfobox);
+        //   map.entities.push(pin);
+        //   map.entities.push(pinInfobox);
+        // }
 
-        function displayInfobox(e) {
-          pinInfobox.setOptions({title: e.target.Title, description: e.target.Description, visible:true, offset: new Microsoft.Maps.Point(0,15)});
-          pinInfobox.setLocation(e.target.getLocation());
-        }
+        // function displayInfobox(e) {
+        //   pinInfobox.setOptions({title: e.target.Title, description: e.target.Description, visible:true, offset: new Microsoft.Maps.Point(0,15)});
+        //   pinInfobox.setLocation(e.target.getLocation());
+        // }
 
-        function hideInfobox(e)
-        {
-          pinInfobox.setOptions({ visible: false });
-        }
+        // function hideInfobox(e)
+        // {
+        //   pinInfobox.setOptions({ visible: false });
+        // }
       }
 
-    </script>
+    </script>-->
   </head>
 
   <body>
 
-    <script type='text/javascript'>
+    <!--<script type='text/javascript'>
       window.onload = function() {
-        var serverLocations = gon.plot_locations;
-        var serverDescriptions = gon.plot_descriptions;
+        // var serverLocations = gon.plot_locations;
+        // var serverDescriptions = gon.plot_descriptions;
         GetMap(serverLocations, serverDescriptions);
       };
-    </script>
+    </script>-->
 
     <div id='mapDiv' style='position:absolute; width:800px; height:500px;'></div>
 
