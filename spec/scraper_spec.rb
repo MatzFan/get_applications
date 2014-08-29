@@ -15,10 +15,17 @@ describe Scraper do
   end
 
   context "#app_refs_on_page" do
-    specify "should return list of application references on the given page" do
-      expect(scraper.app_refs_on_page(1)).to eq(app_refs1)
-      expect(scraper.app_refs_on_page(2)).to eq(app_refs2)
+
+    specify "should return list of application references on page 1 for 1987" do
       expect(Scraper.new(1987).app_refs_on_page(1)).to eq('P/1987/0038')
+    end
+
+    specify "should return list of application references page 1 for 2013" do
+      expect(scraper.app_refs_on_page(1)).to eq(app_refs1)
+    end
+
+    specify "should return list of application references on pae 2 for 2013" do
+      expect(scraper.app_refs_on_page(2)).to eq(app_refs2)
     end
   end
 

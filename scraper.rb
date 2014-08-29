@@ -19,12 +19,16 @@ class Scraper
   end
 
   def num_apps
-    JSON.parse(page_source_json(1))[HEADER].split[8].to_i
+    source = page_source_json(1)
+    JSON.parse(source)[HEADER].split[8].to_i unless source == ''
   end
 
   def app_refs_on_page(page_num)
-    arr = JSON.parse(page_source_json(page_num))[RESULT].split(DELIM)
-    arr[1..-1].map { |e| e.split('">')[0] }.uniq.join('|')
+    source = page_source_json(page_num)
+    unless source == '' then
+      arr = JSON.parse(source)[RESULT].split(DELIM)
+      arr[1..-1].map { |e| e.split('">')[0] }.uniq.join('|')
+    end
   end
 
   def date_params
@@ -32,8 +36,11 @@ class Scraper
   end
 
   def latest_app_num
-    arr = JSON.parse(page_source_json(page_num))[RESULT].split(DELIM)
-    arr[1..-1].map { |e| e.split('">')[0].split('/')[2].to_i}.sort.last
+    source = page_source_json(page_num)
+    unless source == '' then
+      arr = JSON.parse(source)[RESULT].split(DELIM)
+      arr[1..-1].map { |e| e.split('">')[0].split('/')[2].to_i}.sort.last
+    end
   end
 
   def page_source_json(page_num)
