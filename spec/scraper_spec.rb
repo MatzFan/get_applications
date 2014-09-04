@@ -10,7 +10,7 @@ describe Scraper do
 
   context "#num_apps" do
     specify "should return the number of applications for the given year" do
-      expect(scraper.num_apps).to eq(1448)
+      expect(scraper.num_apps).to eq(1447)
     end
   end
 
