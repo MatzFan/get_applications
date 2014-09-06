@@ -27,7 +27,7 @@ get '/location_plan' do
 end
 
 get '/map' do
-  gon.plot_locations = [[49.178609, -2.224561],[49.179508, -2.225726], [49.199063, -2.111496]]
-  gon.plot_descriptions = ['green', 'red', 'orange']
+  gon.plot_locations = params[:coords]
+  gon.plot_descriptions = params[:descriptions]
   erb :map
 end
