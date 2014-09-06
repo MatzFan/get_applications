@@ -27,7 +27,7 @@ get '/location_plan' do
 end
 
 get '/map' do
-  gon.plot_locations = params[:coords]
-  gon.plot_descriptions = params[:descriptions]
+  gon.plot_locations = params[:coords].map { |e| e.split(',')}
+  gon.plot_descriptions = params[:desc]
   erb :map
 end
