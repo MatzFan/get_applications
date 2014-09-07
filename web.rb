@@ -26,7 +26,7 @@ get '/location_plan' do
   File.open(Mechanizer.new(app_ref).get_pdf.save)
 end
 
-get '/map' do
+post '/map' do
   gon.plot_locations = params[:coords].map { |e| e.split(',')}
   gon.plot_descriptions = params[:desc]
   erb :map
