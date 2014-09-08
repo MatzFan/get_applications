@@ -30,5 +30,7 @@ post '/map' do
   gon.plot_locations = params[:coords].split('|').map { |e| e.split(',')}
   gon.plot_icon_colours = params[:colours].split('|')
   gon.plot_categories = params[:categories].split('|')
+  gon.plot_titles = params[:refs].split('|')
+  gon.plot_descriptions = params[:descriptions].split('|')
   erb :map
 end
