@@ -13,7 +13,7 @@
 
     <script type='text/javascript'>
 
-      function GetMap(plot_locations, plot_icon_colours)
+      function GetMap(plot_locations, plot_icon_colours, plot_categories)
       {
         var mapOptions = {
           credentials:'AutjcX00ethCZF2CQURexruteEwuFxvWJ6BVywEvyDv5BIaOO3vfhrH59O_rnLFd',
@@ -27,7 +27,8 @@
           var lng = plot_locations[i][1];
           var loc = new Microsoft.Maps.Location(lat, lng);
           var colour = plot_icon_colours[i];
-          var pushpinOptions = {icon: 'https://www.google.com/mapfiles/ms/micons/' + colour + '.png', text: 'A', textOffset: new Microsoft.Maps.Point(3, 3)};
+          var categoryLetter = plot_categories[i];
+          var pushpinOptions = {icon: 'https://www.google.com/mapfiles/ms/micons/' + colour + '.png', text: categoryLetter, textOffset: new Microsoft.Maps.Point(3, 3)};
           var pin = new Microsoft.Maps.Pushpin(loc, pushpinOptions);
           pin.Title = 'Title';
           pin.Description = colour;
@@ -59,7 +60,8 @@
       window.onload = function() {
         var serverLocations = gon.plot_locations;
         var serverIconColours = gon.plot_icon_colours;
-        GetMap(serverLocations, serverIconColours);
+        var serverCategories = gon.plot_categories;
+        GetMap(serverLocations, serverIconColours, serverCategories);
       };
     </script>
 
