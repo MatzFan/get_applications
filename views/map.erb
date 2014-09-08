@@ -13,6 +13,9 @@
 
     <script type='text/javascript'>
 
+      var infoboxLayer = new Microsoft.Maps.EntityCollection();
+      var pinLayer = new Microsoft.Maps.EntityCollection();
+
       function GetMap(plot_locations, plot_icon_colours, plot_categories, plot_titles, plot_descriptions)
       {
         var mapOptions = {
@@ -33,22 +36,26 @@
           pin.Title = plot_titles[i];
           pin.Description = plot_descriptions[i];
           pinInfobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), {visible: false });
-          // Add handlers
           Microsoft.Maps.Events.addHandler(pin, 'click', displayInfobox);
           Microsoft.Maps.Events.addHandler(map, 'viewchange', hideInfobox);
-          map.entities.push(pin);
-          map.entities.push(pinInfobox);
+          pinLayer.push(pin);
+          infoboxLayer.push(pinInfobox);
         }
 
-        function displayInfobox(e) {
-          pinInfobox.setOptions({title: e.target.Title, description: e.target.Description, visible:true, offset: new Microsoft.Maps.Point(0,15)});
-          pinInfobox.setLocation(e.target.getLocation());
-        }
+        map.entities.push(pinLayer);
+        map.entities.push(infoboxLayer);
 
-        function hideInfobox(e)
-        {
-          pinInfobox.setOptions({ visible: false });
-        }
+      }
+
+      function displayInfobox(e) {
+        pinInfobox.setOptions({title: e.target.Title, description: e.target.Description, visible:true, offset: new Microsoft.Maps.Point(0,15)});
+        pinInfobox.setLocation(e.target.getLocation());
+      }
+
+      function hideInfobox(e)
+      {
+        pinInfobox.setOptions({ visible: false });
+
       }
 
     </script>
