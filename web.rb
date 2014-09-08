@@ -28,6 +28,6 @@ end
 
 post '/map' do
   gon.plot_locations = params[:coords].split('|').map { |e| e.split(',')}
-  gon.plot_descriptions = params[:desc].split('|')
+  gon.plot_icon_colours = params[:colours].split('|')
   erb :map
 end

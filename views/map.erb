@@ -13,7 +13,7 @@
 
     <script type='text/javascript'>
 
-      function GetMap(plot_locations, plot_descriptions)
+      function GetMap(plot_locations, plot_icon_colours)
       {
         var mapOptions = {
           credentials:'AutjcX00ethCZF2CQURexruteEwuFxvWJ6BVywEvyDv5BIaOO3vfhrH59O_rnLFd',
@@ -26,11 +26,11 @@
           var lat = plot_locations[i][0];
           var lng = plot_locations[i][1];
           var loc = new Microsoft.Maps.Location(lat, lng);
-          var desc = plot_descriptions[i];
-          var pushpinOptions = {icon: 'https://www.google.com/mapfiles/ms/micons/' + desc + '.png', text: 'A', textOffset: new Microsoft.Maps.Point(3, 3)};
+          var colour = plot_icon_colours[i];
+          var pushpinOptions = {icon: 'https://www.google.com/mapfiles/ms/micons/' + colour + '.png', text: 'A', textOffset: new Microsoft.Maps.Point(3, 3)};
           var pin = new Microsoft.Maps.Pushpin(loc, pushpinOptions);
           pin.Title = 'Title';
-          pin.Description = desc;
+          pin.Description = colour;
           pinInfobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), {visible: false });
           // Add handlers
           Microsoft.Maps.Events.addHandler(pin, 'click', displayInfobox);
@@ -58,8 +58,8 @@
     <script type='text/javascript'>
       window.onload = function() {
         var serverLocations = gon.plot_locations;
-        var serverDescriptions = gon.plot_descriptions;
-        GetMap(serverLocations, serverDescriptions);
+        var serverIconColours = gon.plot_icon_colours;
+        GetMap(serverLocations, serverIconColours);
       };
     </script>
 
