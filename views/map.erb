@@ -30,7 +30,7 @@
           var categoryLetter = plot_categories[i];
           var pushpinOptions = {icon: 'https://www.google.com/mapfiles/ms/micons/' + colour + '.png', text: categoryLetter, textOffset: new Microsoft.Maps.Point(3, 3)};
           var pin = new Microsoft.Maps.Pushpin(loc, pushpinOptions);
-          pin.Title = plot_descriptions[i];
+          pin.Title = plot_titles[i];
           pin.Description = plot_descriptions[i];
           pinInfobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), {visible: false });
           // Add handlers
