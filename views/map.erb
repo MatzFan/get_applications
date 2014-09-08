@@ -37,7 +37,7 @@
           pin.Description = plot_descriptions[i];
           pinInfobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), {visible: false });
           // custom html to implement variable height, scrollable pinInfoBox
-          pinInfobox.setHtmlContent("<div style='overflow:auto; max-height:" + 100 + "px'> " + plot_descriptions[i] + "</div>");
+          pinInfobox.setHtmlContent("<div style='overflow:auto; max-height:" + 50 + "px'> " + plot_descriptions[i] + "</div>");
           Microsoft.Maps.Events.addHandler(pin, 'click', displayInfobox);
           Microsoft.Maps.Events.addHandler(map, 'viewchange', hideInfobox);
           pinLayer.push(pin);
