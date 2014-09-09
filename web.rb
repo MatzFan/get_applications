@@ -34,3 +34,7 @@ post '/map' do
   gon.plot_descriptions = params[:descriptions].split('|')
   erb :map
 end
+
+get '/docs' do
+  DocScraper.new
+end
