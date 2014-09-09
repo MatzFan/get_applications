@@ -13,11 +13,11 @@
 
     <script type='text/javascript'>
 
-      var infoboxLayer = new Microsoft.Maps.EntityCollection();
-      var pinLayer = new Microsoft.Maps.EntityCollection();
-
       function GetMap(plot_locations, plot_icon_colours, plot_categories, plot_titles, plot_descriptions)
       {
+        var infoboxLayer = new Microsoft.Maps.EntityCollection();
+        var pinLayer = new Microsoft.Maps.EntityCollection();
+
         var mapOptions = {
           credentials:'AutjcX00ethCZF2CQURexruteEwuFxvWJ6BVywEvyDv5BIaOO3vfhrH59O_rnLFd',
           center: new Microsoft.Maps.Location(49.21042016382462, -2.1445659365234615),
@@ -25,29 +25,24 @@
           mapTypeId: Microsoft.Maps.MapTypeId.aerial
         };
         var map = new Microsoft.Maps.Map(document.getElementById('mapDiv'), mapOptions);
+
         for (var i=0,  len=plot_locations.length; i < len; i++) {
-          var lat = plot_locations[i][0];
-          var lng = plot_locations[i][1];
+          var lat = plot_locations[i][0]; var lng = plot_locations[i][1];
           var loc = new Microsoft.Maps.Location(lat, lng);
-          var colour = plot_icon_colours[i];
-          var categoryLetter = plot_categories[i];
-          var pushpinOptions = {icon: 'https://www.google.com/mapfiles/ms/micons/' + colour + '.png', text: categoryLetter, textOffset: new Microsoft.Maps.Point(3, 3)};
+          var pushpinOptions = {icon: 'https://www.google.com/mapfiles/ms/micons/' + plot_icon_colours[i] + '.png', text: plot_categories[i], textOffset: new Microsoft.Maps.Point(3, 3)};
           var pin = new Microsoft.Maps.Pushpin(loc, pushpinOptions);
           pin.Title = plot_titles[i];
           pin.Description = plot_descriptions[i];
           pinInfobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), {visible: false });
-          // custom html to implement variable height, scrollable pinInfoBox
-          var blurb = 'sdvasv`s k`  sdvsndvksndlvsdjv zls v`s dvl` sdlj v sdnvks dvjhs dvhjb sdjhv `dhjsbcv `jds ckjh`sd hvjd'
-          pinInfobox.setHtmlContent("<div style='overflow:auto; max-height:150px' >" + plot_descriptions[i] + blurb + "</div>");
+
           Microsoft.Maps.Events.addHandler(pin, 'click', displayInfobox);
           Microsoft.Maps.Events.addHandler(map, 'viewchange', hideInfobox);
+
           pinLayer.push(pin);
           infoboxLayer.push(pinInfobox);
         }
-
         map.entities.push(pinLayer);
         map.entities.push(infoboxLayer);
-
       }
 
       function displayInfobox(e) {
@@ -58,7 +53,6 @@
       function hideInfobox(e)
       {
         pinInfobox.setOptions({ visible: false });
-
       }
 
     </script>
