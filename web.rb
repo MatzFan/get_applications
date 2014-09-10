@@ -35,6 +35,10 @@ post '/map' do
   erb :map
 end
 
+get '/meetings' do
+  DocScraper.new.meetings.join('|')
+end
+
 get '/docs' do
   DocScraper.new
 end

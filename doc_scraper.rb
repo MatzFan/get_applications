@@ -1,7 +1,10 @@
 require 'mechanize'
+require 'open-uri'
+require 'pdf-reader'
 
 class DocScraper
 
+  ROOT = 'http://www.gov.je'
   URL = 'http://www.gov.je/PlanningBuilding/PublicPlanningMeetings/Pages/AgendasMinutes.aspx'
   PAP = 'Planning Applications Panel'
   MH = 'Ministerial Hearing'
@@ -34,19 +37,33 @@ class DocScraper
   end
 
   def doc_dates
-    doc_names.map { |name| Date.parse(name) }
+    doc_names.map { |name| Date.parse(name).strftime("%d/%m/%Y") }
   end
 
   def meeting_types
-    doc_uris.map { |uri| PAP_TEXT.any? { |txt| uri.include?(txt) } ? PAP : MH }
+    doc_uris.map { |uri| PAP_TEXT.any? { |txt| uri.include?(txt) } ? PAP : MH } # NOT RELIABLE
   end
+
+  def meetings
+    meeting_types.zip(doc_dates).uniq
+  end
+
+  # def pdf(url)
+  #   PDF::Reader.new open(URI.encode(ROOT + url))
+  # end
+
+  # def text(pdf)
+  #   pdf.pages.each { |page| puts page.walk }
+  # end
 
 end
 
-# s = DocScraper.new
+s = DocScraper.new
+# pp s.doc_links
 # pp s.doc_uris
-# # pp s.doc_names
-# # pp s.doc_dates
+# pp s.doc_dates
 # pp s.meeting_types
+# s.meetings.each { |meet| puts meet[0] + ' ' + meet[1] }
+s.pdf(s.doc_uris[2])
 
 
