@@ -2,6 +2,7 @@ require 'sinatra'
 require 'gon-sinatra'
 require './scraper'
 require './mechanizer'
+require './doc_scraper'
 
 Sinatra::register Gon::Sinatra
 
@@ -36,7 +37,7 @@ post '/map' do
 end
 
 get '/meetings' do
-  DocScraper.new.meetings.join('|')
+  DocScraper.new.meetings.join("\n")
 end
 
 get '/docs' do
