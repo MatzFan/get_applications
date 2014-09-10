@@ -37,7 +37,7 @@ class DocScraper
   end
 
   def doc_dates
-    doc_names.map { |name| Date.parse(name).strftime("%d/%m/%Y") }
+    doc_names.map { |name| Date.parse(name).strftime("%d/%m/%y") }
   end
 
   def meeting_types
