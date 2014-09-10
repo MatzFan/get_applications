@@ -45,7 +45,7 @@ class DocScraper
   end
 
   def meetings
-    meeting_types.zip(doc_dates).uniq.map { |e| e.join('') }
+    meeting_types.zip(doc_dates).uniq.map { |e| e.join('|') }
   end
 
   # def pdf(url)
