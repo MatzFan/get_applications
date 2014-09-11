@@ -57,7 +57,7 @@ class DocScraper
 
 end
 
-s = DocScraper.new
+# s = DocScraper.new
 # pp s.doc_links
 # pp s.doc_uris
 # pp s.doc_dates

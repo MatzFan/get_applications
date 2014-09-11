@@ -3,6 +3,7 @@ require 'gon-sinatra'
 require './scraper'
 require './mechanizer'
 require './doc_scraper'
+require './pdf_reader'
 
 Sinatra::register Gon::Sinatra
 
@@ -40,6 +41,7 @@ get '/meetings' do
   DocScraper.new.meetings.join("\n")
 end
 
-get '/docs' do
-  DocScraper.new
+get '/doc_app_refs' do
+  file = URI.encode(params[:file])
+  PdfReader.new(file).app_refs.join("\n")
 end
