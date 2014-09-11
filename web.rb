@@ -42,6 +42,8 @@ get '/meetings' do
 end
 
 get '/doc_app_refs' do
-  file = URI.encode(params[:file])
-  PdfReader.new(file).app_refs.join("\n")
+  file = params[:file]
+  reader = PdfReader.new(file)
+  reader.download
+  reader.app_refs.join("\n")
 end

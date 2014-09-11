@@ -13,7 +13,7 @@ class PdfReader
   end
 
   def pdf_path
-    path = File.expand_path File.dirname(__FILE__) + '/' + File.basename(URI.parse(remote_url).path)
+    path = File.expand_path File.dirname(__FILE__) + '/' + File.basename(URI.parse(URI.encode(remote_url)).path)
     URI.decode(path)
   end
 
@@ -34,6 +34,7 @@ class PdfReader
   def download
     cmd = "wget '#{remote_url}'"
     `#{cmd}`
+    sleep(5)
   end
 
   def app_refs
