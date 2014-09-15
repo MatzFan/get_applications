@@ -1,6 +1,3 @@
-require 'bundler'
-Bundler.setup
-require 'xpdf'
 require 'uri'
 
 class PdfReader
