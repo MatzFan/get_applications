@@ -1,23 +1,32 @@
 require 'uri'
+require 'shellwords'
 
 class PdfReader
 
-  attr_reader :remote_url, :pdf_path
+  attr_reader :remote_url, :pdf_path, :bash_escaped_pdf_file_name
 
   def initialize(remote_url)
     @remote_url = remote_url
     @pdf_path = pdf_path
+    @bash_escaped_pdf_file_name = bash_escaped_pdf_file_name
+  end
+
+  def encoded_pdf_file_name
+    File.basename(URI.parse(remote_url).path)
+  end
+
+  def bash_escaped_pdf_file_name
+    Shellwords.escape(URI.decode(encoded_pdf_file_name))
   end
 
   def pdf_path
-    path = File.expand_path File.dirname(__FILE__) + '/' + File.basename(URI.parse(URI.encode(remote_url)).path)
+    path = File.expand_path File.dirname(__FILE__) + '/' + encoded_pdf_file_name
     URI.decode(path)
   end
 
   def pdf_to_text(noblank = true)
     cmd = "pdftotext -enc UTF-8 '#{pdf_path}'"
     `#{cmd}`
-    # file = File.new(file.sub(/.pdf$/, '.txt'))
     file = File.new(pdf_path.sub(/.pdf$/, '.txt'))
     txt_array = []
     file.readlines.each do |l|
@@ -29,7 +38,7 @@ class PdfReader
   end
 
   def download
-    cmd = "wget '#{remote_url}'"
+    cmd = "curl #{remote_url} -o #{bash_escaped_pdf_file_name}"
     `#{cmd}`
     sleep(5)
   end
@@ -43,6 +52,8 @@ end
 
 # pdf = 'http://www.gov.je/SiteCollectionDocuments/Planning%20and%20building/A%20PAP%2028%2008%202014.pdf'
 # reader = PdfReader.new(pdf)
+# puts reader.pdf_path
+# puts reader.bash_escaped_pdf_file_name
 # file = reader.download
 # text = reader.pdf_to_text(file)
 # p reader.app_refs
