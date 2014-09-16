@@ -24,7 +24,7 @@ class DocScraper
   end
 
   def doc_uris
-    doc_links.map { |link| URI.unescape(link.uri.to_s) }
+    doc_links.map { |link| ROOT + URI.unescape(link.uri.to_s) }
   end
 
   def doc_names
@@ -43,26 +43,32 @@ class DocScraper
     doc_uris.map { |uri| PAP_TEXT.any? { |txt| uri.include?(txt) } ? PAP : MH } # NOT RELIABLE
   end
 
-  def meetings
-    meeting_types.zip(doc_dates).uniq.map { |e| e.join('|') }
+  def meet_type_date
+    join(meeting_types.zip(doc_dates))
   end
 
-  # def pdf(url)
-  #   PDF::Reader.new open(URI.encode(ROOT + url))
-  # end
+  def meetings
+    meet_type_date.uniq
+  end
 
-  # def text(pdf)
-  #   pdf.pages.each { |page| puts page.walk }
-  # end
+  def documents
+    join(doc_types.zip(doc_uris).zip(meet_type_date.map { |e| e.sub('|','') }))
+  end
+
+  def join(array)
+    array.map { |e| e.join('|') }
+  end
 
 end
 
 # s = DocScraper.new
+# pp s.page_source
 # pp s.doc_links
 # pp s.doc_uris
 # pp s.doc_dates
 # pp s.meeting_types
 # puts s.meetings
+# puts s.documents
 # .each { |meet| puts meet[0] + ' ' + meet[1] }
 # s.pdf(s.doc_uris[2])
 

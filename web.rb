@@ -41,6 +41,10 @@ get '/meetings' do
   DocScraper.new.meetings.join("\n")
 end
 
+get '/documents' do
+  DocScraper.new.documents.join("\n")
+end
+
 get '/doc_app_refs' do
   file = URI.encode(params[:file])
   reader = PdfReader.new(file)

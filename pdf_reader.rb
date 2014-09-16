@@ -45,7 +45,7 @@ class PdfReader
 
   def app_refs
     txt_array = pdf_to_text
-    txt_array.select { |t| t =~ /^[A-Z]{1,3}\/\d{4}\/\d{4}$/ rescue nil }.uniq
+    txt_array.select { |t| t =~ /^[A-Z]{1,3}\/20\d{2}\/\d{4}$/ rescue nil }.uniq
   end
 
 end
