@@ -24,7 +24,7 @@ class DocScraper
   end
 
   def doc_uris
-    doc_links.map { |link| ROOT + URI.unescape(link.uri.to_s) }
+    doc_links.map { |link| ROOT + link.uri.to_s }
   end
 
   def doc_names
