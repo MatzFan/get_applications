@@ -9,7 +9,7 @@ class DocScraper
   MH = 'Ministerial Hearing'
   PAP_TEXT = ['PAP', 'Panel'] # text in url which determines doc type is PAP
 
-  attr_reader :agent, :doc, :pap_links, :mh_links, :upcoming
+  attr_reader :agent, :doc, :pap_links, :mh_links
 
   def initialize
     @agent = Mechanize.new(URL)
@@ -73,16 +73,3 @@ class DocScraper
   end
 
 end
-
-# s = DocScraper.new
-# pp s.meeting_types
-# pp s.doc_links
-# pp s.doc_uris
-# pp s.doc_dates
-# pp s.meetings
-# puts s.meetings
-# puts s.documents
-# .each { |meet| puts meet[0] + ' ' + meet[1] }
-# s.pdf(s.doc_uris[2])
-
-
