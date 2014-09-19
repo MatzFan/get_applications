@@ -9,10 +9,17 @@ class DocScraper
   MH = 'Ministerial Hearing'
   PAP_TEXT = ['PAP', 'Panel'] # text in url which determines doc type is PAP
 
-  attr_reader :agent
+  attr_reader :agent, :doc, :pap_links, :mh_links, :upcoming
 
   def initialize
     @agent = Mechanize.new(URL)
+    @doc = Nokogiri::XML(open(URL))
+    @pap_links = link_types(1)
+    @mh_links = link_types(2)
+  end
+
+  def link_types(t_num)
+    doc.css('table')[t_num].css('a').map { |link| ROOT + link.attr('href') }
   end
 
   def page_source
@@ -39,8 +46,14 @@ class DocScraper
     doc_names.map { |name| Date.parse(name).strftime("%d/%m/%Y") }
   end
 
+  def d_type(uri) # fallback method to identify document type from file name
+    PAP_TEXT.any? { |text| File.basename(uri).include?(text) } ? PAP : MH
+  end
+
   def meeting_types
-    doc_uris.map { |uri| PAP_TEXT.any? { |txt| uri.include?(txt) } ? PAP : MH } # NOT RELIABLE
+    doc_uris.map do |uri|
+      pap_links.include?(uri) ? PAP : mh_links.include?(uri) ? MH : d_type(uri)
+    end
   end
 
   def meet_type_date
@@ -62,11 +75,11 @@ class DocScraper
 end
 
 # s = DocScraper.new
-# pp s.page_source
+# pp s.meeting_types
 # pp s.doc_links
 # pp s.doc_uris
 # pp s.doc_dates
-# pp s.meeting_types
+# pp s.meetings
 # puts s.meetings
 # puts s.documents
 # .each { |meet| puts meet[0] + ' ' + meet[1] }
