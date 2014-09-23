@@ -5,9 +5,9 @@ require 'open-uri'
 class PdfReader
 
   CONN = Rfm::Server.new(
-    host: 'n33.fmphost.com',
-    account_name: 'admin',
-    password: 'N0gbad01',
+    host: ENV['FMS_HOST'],
+    account_name: ENV['FMS_ACCOUNT_NAME'],
+    password: ENV['FMS_PASSWORD'],
     ssl: true,
     port: 443
   )
