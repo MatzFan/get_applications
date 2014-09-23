@@ -48,8 +48,9 @@ class PdfReader
     end
   end
 
-  def parse_app_refs(txt_array)
-    txt_array.select { |t| t =~ /^[A-Z]{1,3}\/20\d{2}\/\d{4}$/ rescue nil }.uniq
+  def parse_app_refs(arr)
+    nasty_regex = '^(?:\d. )?([A-Z]{1,3}\/20\d{2}\/\d{4})$'
+    arr.map { |t| /#{nasty_regex}/.match(t)[1] rescue nil }.uniq.compact
   end
 
 end
