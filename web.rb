@@ -4,8 +4,11 @@ require './scraper'
 require './mechanizer'
 require './doc_scraper'
 require './pdf_reader'
+require './config/database' # sets DB_CONFIG
 
 Sinatra::register Gon::Sinatra
+
+Rack::Utils.key_space_limit = 262144 # for /map big requests, default is 65536
 
 get '/' do
   Scraper.new(2014).latest_app_num.to_s
@@ -46,6 +49,6 @@ get '/documents' do
 end
 
 get '/doc_app_refs' do
-  reader = PdfReader.new(params[:id])
+  reader = PdfReader.new(DB_CONFIG, params[:id])
   reader.download
 end
