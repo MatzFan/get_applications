@@ -4,7 +4,7 @@ require 'open-uri'
 
 class PdfReader
 
-  OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+  # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
   attr_reader :server, :record_id
 
