@@ -1,3 +1,4 @@
+require_relative 'spec_helper'
 require './scraper'
 
 describe Scraper do
