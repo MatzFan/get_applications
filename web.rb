@@ -52,3 +52,7 @@ get '/doc_app_refs' do
   reader = PdfReader.new(DB_CONFIG, params[:id])
   reader.download
 end
+
+get '/app_details' do
+  Mechanizer.new(params[:app_ref]).details_table_data.join("\n")
+end
