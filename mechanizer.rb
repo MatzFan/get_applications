@@ -43,8 +43,12 @@ class Mechanizer
     details_page.search(DETAILS_CSS)[n].css('tr').css('td').css('span')
   end
 
-  def details_table_data
+  def details_data
     (0..1).map { |n| details_table(n).map { |i| i.text } }.flatten if valid?
+  end
+
+  def details
+    details_table_titles.zip(details_data).map { |i| i.join('|') }
   end
 
   def valid?

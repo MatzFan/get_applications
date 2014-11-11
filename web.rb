@@ -54,5 +54,5 @@ get '/doc_app_refs' do
 end
 
 get '/app_details' do
-  Mechanizer.new(params[:app_ref]).details_table_data.join("\n")
+  Mechanizer.new(params[:app_ref]).details.join("\n") if params[:app_ref]
 end
