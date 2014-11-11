@@ -2,12 +2,12 @@ require 'mechanize'
 
 class Mechanizer
 
-  DETAILS_URL = 'https://www.mygov.je//Planning/Pages/PlanningApplicationDetail.aspx?s=1&r='
   DOCS_URL = 'https://www.mygov.je/Planning/Pages/PlanningApplicationDocuments.aspx?s=1&r='
   AGREEMENT = 'ctl00$SPWebPartManager1$g_f6ec2e19_056b_4a70_bbcd_9b1eb7651447$ctl00$cbDocumentAgreementCondition'
   FORM = 'aspnetForm'
   TARGET = 'ctl00$SPWebPartManager1$g_f6ec2e19_056b_4a70_bbcd_9b1eb7651447$ctl00$rptDocumentGroups$ctl01$rptDocumentGroupsItems$ctl00$LinkButton1'
   DELIM = 'ctl00_SPWebPartManager1_g_cfcbb358_c3fe_4db2_9273_0f5e5f132083_ctl00_lbl'
+  DETAILS_URL = 'https://www.mygov.je//Planning/Pages/PlanningApplicationDetail.aspx?s=1&r='
   DETAILS_CSS = ".//table[@class='pln-searchd-table']"
   DETAILS_TABLE_TITLES = ["Reference",
                           "Category",
@@ -21,6 +21,7 @@ class Mechanizer
                           "PostCode",
                           "Constraints",
                           "Agent"]
+  COORDS = ['Latitude', 'Longitude']
 
   attr_reader :agent, :app_ref, :details_page
 
@@ -37,6 +38,15 @@ class Mechanizer
   def get_details_page
     agent.agent.http.ssl_version = :TLSv1 # Lord knows why this needs to be set
     agent.get(DETAILS_URL + app_ref)
+  end
+
+  def app_coords
+    source = details_page.body
+    COORDS.map { |coord| parse_coord(source, coord)}
+  end
+
+  def parse_coord(source, coord)
+    source.split('window.MapCentre' + coord + ' = ').last.split(';').first
   end
 
   def details_table(n) # app details are split over 2 tables with same class
