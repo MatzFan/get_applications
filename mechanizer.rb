@@ -8,6 +8,7 @@ class Mechanizer
   TARGET = 'ctl00$SPWebPartManager1$g_f6ec2e19_056b_4a70_bbcd_9b1eb7651447$ctl00$rptDocumentGroups$ctl01$rptDocumentGroupsItems$ctl00$LinkButton1'
   DELIM = 'ctl00_SPWebPartManager1_g_cfcbb358_c3fe_4db2_9273_0f5e5f132083_ctl00_lbl'
   DETAILS_URL = 'https://www.mygov.je//Planning/Pages/PlanningApplicationDetail.aspx?s=1&r='
+  DATES_URL = 'https://www.mygov.je/Planning/Pages/PlanningApplicationTimeline.aspx?s=1&r='
   DETAILS_CSS = ".//table[@class='pln-searchd-table']"
   DETAILS_TABLE_TITLES = ["Reference",
                           "Category",
@@ -22,13 +23,24 @@ class Mechanizer
                           "Constraints",
                           "Agent"]
   COORDS = ['Latitude', 'Longitude']
+  DATES = ['ValidDate',
+           'AdvertisedDate',
+           'endpublicityDate',
+           'SitevisitDate',
+           'CommitteeDate',
+           'Decisiondate',
+           'Appealdate']
+  DATE_DELIM = 'ctl00_SPWebPartManager1_g_eb24f5d8_516c_4120_9f29_512444e2187a_ctl00_lbl'
 
-  attr_reader :agent, :app_ref, :details_page
+  attr_reader :agent, :app_ref, :details_page, :details_source, :dates_source
 
   def initialize(app_ref)
     @agent = Mechanize.new
     @app_ref = app_ref
     @details_page = get_details_page
+    @details_source = details_page.body
+    @dates_page = get_dates_page
+    @dates_source = @dates_page.body
   end
 
   def docs_page
@@ -40,9 +52,25 @@ class Mechanizer
     agent.get(DETAILS_URL + app_ref)
   end
 
+  def get_dates_page
+    agent.agent.http.ssl_version = :TLSv1 # Lord knows why this needs to be set
+    agent.get(DATES_URL + app_ref)
+  end
+
   def app_coords
-    source = details_page.body
-    COORDS.map { |coord| parse_coord(source, coord)}
+    COORDS.map { |coord| parse_coord(details_source, coord)}
+  end
+
+  def app_dates
+    (0..6).map { |n| format(parse_date(dates_source, n))}
+  end
+
+  def parse_date(source, n)
+    source.split(DATE_DELIM + DATES[n]).last.split('<').first.split('>').last
+  end
+
+  def format(date_string) # date can be 'n/a', hence rescue
+    DateTime.parse(date_string).strftime("%d/%m/%Y") rescue nil
   end
 
   def parse_coord(source, coord)
