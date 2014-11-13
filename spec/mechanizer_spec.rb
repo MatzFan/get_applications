@@ -6,6 +6,20 @@ describe Mechanizer do
   let(:ref) { 'RW/2014/0548' }
   let(:mechanizer) { Mechanizer.new(ref) }
   let(:url) { 'https://www.mygov.je//Planning/Pages/PlanningApplicationDetail.aspx?s=1&r=' + ref }
+  let(:coords) { ['Latitude|49.185511', 'Longitude|-2.191882'] }
+  let(:details) { ["Reference|RW/2014/0548",
+                   "Category|RW",
+                   "Status|APPEAL",
+                   "Officer|Richard Greig",
+                   "Applicant|Mr & Mrs R.I.G. Hardcastle, Le Mont Sohier, St. Brelade, JE3 8EA",
+                   "Description|Replace 5 No. windows on South elevation..... REQUEST FOR RECONSIDERATION for refusal of planning permission.",
+                   "ApplicationAddress|Homewood",
+                   "RoadName|Le Mont Sohier",
+                   "Parish|St. Brelade",
+                   "PostCode|JE3 8EA",
+                   "Constraints|Built-Up Area, Green Backdrop Zone, Potential Listed Building, Primary Route Network",
+                   "Agent|",
+                   "49.185511", "-2.191882"]}
   let(:dates) { ['ValidDate|04/04/2014',
        'AdvertisedDate|15/04/2014',
        'endpublicityDate|06/05/2014',
@@ -22,7 +36,7 @@ describe Mechanizer do
 
   context "#app_coords" do
     specify "should return the coordinates of the application" do
-      expect(mechanizer.app_coords.join).to eq('49.185511-2.191882')
+      expect(mechanizer.app_coords).to eq(coords)
     end
   end
 

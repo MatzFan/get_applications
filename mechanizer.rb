@@ -58,7 +58,7 @@ class Mechanizer
   end
 
   def app_coords
-    COORDS.map { |coord| parse_coord(details_source, coord)}
+    COORDS.map { |coord| coord + '|' + parse_coord(details_source, coord)}
   end
 
   def app_dates
@@ -97,8 +97,12 @@ class Mechanizer
     (0..1).map { |n| details_table(n).map { |i| i.text } }.flatten if valid?
   end
 
-  def app_details
+  def app_details_no_coords
     details_table_titles.zip(details_data).map { |i| i.join('|') }
+  end
+
+  def app_details
+    app_details_no_coords + app_coords
   end
 
   def valid? # valid details table titles

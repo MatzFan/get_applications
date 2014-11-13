@@ -57,9 +57,9 @@ get '/app_details' do
   Mechanizer.new(params[:app_ref]).app_details.join("\n") if params[:app_ref]
 end
 
-get '/app_coords' do
-  Mechanizer.new(params[:app_ref]).app_coords.join("\n") if params[:app_ref]
-end
+# get '/app_coords' do
+#   Mechanizer.new(params[:app_ref]).app_coords.join("\n") if params[:app_ref]
+# end
 
 get '/app_dates' do
   Mechanizer.new(params[:app_ref]).app_dates.join("\n") if params[:app_ref]
