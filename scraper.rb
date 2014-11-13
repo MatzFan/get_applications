@@ -7,7 +7,7 @@ class Scraper
   CURL = 'curl -s -X POST -H "Content-Type: application/json" -d '
   P1 = '{"URL":"https://www.mygov.je//Planning/Pages/Planning.aspx","CommonParameters":"|05|'
   P2 = '||||","SearchParameters":"|1301||||0|All|All|'
-  URL = 'https://www.mygov.je/_layouts/PlanningAjaxServices/PlanningSearch.svc/Search'
+  REQ_URL = 'https://www.mygov.je/_layouts/15/PlanningAjaxServices/PlanningSearch.svc/Search'
   HEADER = 'HeaderHTML'
   RESULT = 'ResultHTML'
 
@@ -44,7 +44,7 @@ class Scraper
   end
 
   def page_source_json(page_num)
-    curl = CURL + "'" + P1 + page_num.to_s + P2 + date_params + "' " + URL
+    curl = CURL + "'" + P1 + page_num.to_s + P2 + date_params + "' " + REQ_URL
     `#{curl}`
   end
 
