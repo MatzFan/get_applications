@@ -54,7 +54,7 @@ get '/doc_app_refs' do
 end
 
 get '/app_details' do
-  Mechanizer.new(params[:app_ref]).details.join("\n") if params[:app_ref]
+  Mechanizer.new(params[:app_ref]).app_details.join("\n") if params[:app_ref]
 end
 
 get '/app_coords' do

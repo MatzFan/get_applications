@@ -9,7 +9,7 @@ class Mechanizer
   DELIM = 'ctl00_SPWebPartManager1_g_cfcbb358_c3fe_4db2_9273_0f5e5f132083_ctl00_lbl'
   DETAILS_URL = 'https://www.mygov.je//Planning/Pages/PlanningApplicationDetail.aspx?s=1&r='
   DATES_URL = 'https://www.mygov.je/Planning/Pages/PlanningApplicationTimeline.aspx?s=1&r='
-  DETAILS_CSS = ".//table[@class='pln-searchd-table']"
+  TABLE_CSS = ".//table[@class='pln-searchd-table']"
   DETAILS_TABLE_TITLES = ["Reference",
                           "Category",
                           "Status",
@@ -23,16 +23,16 @@ class Mechanizer
                           "Constraints",
                           "Agent"]
   COORDS = ['Latitude', 'Longitude']
-  DATES = ['ValidDate',
-           'AdvertisedDate',
-           'endpublicityDate',
-           'SitevisitDate',
-           'CommitteeDate',
-           'Decisiondate',
-           'Appealdate']
-  DATE_DELIM = 'ctl00_SPWebPartManager1_g_eb24f5d8_516c_4120_9f29_512444e2187a_ctl00_lbl'
+  DATES_TABLE_TITLES = ['ValidDate',
+                        'AdvertisedDate',
+                        'endpublicityDate',
+                        'SitevisitDate',
+                        'CommitteeDate',
+                        'Decisiondate',
+                        'Appealdate']
+  ID_DELIM = 'ctl00_lbl'
 
-  attr_reader :agent, :app_ref, :details_page, :details_source, :dates_source
+  attr_reader :agent, :app_ref, :details_page, :details_source, :dates_page, :dates_source
 
   def initialize(app_ref)
     @agent = Mechanize.new
@@ -62,11 +62,23 @@ class Mechanizer
   end
 
   def app_dates
-    (0..6).map { |n| format(parse_date(dates_source, n))}
+    dates_table_titles.zip(dates_data).map { |i| i.join('|') }
   end
 
-  def parse_date(source, n)
-    source.split(DATE_DELIM + DATES[n]).last.split('<').first.split('>').last
+  def dates_data
+    dates_table.map { |i| format(i.text) } if valid_dates
+  end
+
+  def valid_dates
+    dates_table_titles == DATES_TABLE_TITLES
+  end
+
+  def dates_table
+    dates_page.search(TABLE_CSS).css('tr').css('td').css('span')
+  end
+
+  def dates_table_titles
+    dates_table.map { |i| parse(i.attr('id')) }
   end
 
   def format(date_string) # date can be 'n/a', hence rescue
@@ -78,27 +90,27 @@ class Mechanizer
   end
 
   def details_table(n) # app details are split over 2 tables with same class
-    details_page.search(DETAILS_CSS)[n].css('tr').css('td').css('span')
+    details_page.search(TABLE_CSS)[n].css('tr').css('td').css('span')
   end
 
   def details_data
     (0..1).map { |n| details_table(n).map { |i| i.text } }.flatten if valid?
   end
 
-  def details
+  def app_details
     details_table_titles.zip(details_data).map { |i| i.join('|') }
   end
 
-  def valid?
+  def valid? # valid details table titles
     details_table_titles == DETAILS_TABLE_TITLES
   end
 
   def details_table_titles
-    (0..1).map { |n| details_table(n).map { |i| end_(i.attr('id')) } }.flatten
+    (0..1).map { |n| details_table(n).map { |i| parse(i.attr('id')) } }.flatten
   end
 
-  def end_(text)
-    text.split('ctl00_lbl').last
+  def parse(text)
+    text.split(ID_DELIM).last
   end
 
   def get_pdf

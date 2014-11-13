@@ -6,13 +6,13 @@ describe Mechanizer do
   let(:ref) { 'RW/2014/0548' }
   let(:mechanizer) { Mechanizer.new(ref) }
   let(:url) { 'https://www.mygov.je//Planning/Pages/PlanningApplicationDetail.aspx?s=1&r=' + ref }
-  let(:dates) { ['04/04/2014',
-                 '15/04/2014',
-                 '06/05/2014',
-                 nil,
-                 '15/08/2014',
-                 '14/10/2014',
-                 '18/06/2014'] }
+  let(:dates) { ['ValidDate|04/04/2014',
+       'AdvertisedDate|15/04/2014',
+       'endpublicityDate|06/05/2014',
+       'SitevisitDate|',
+       'CommitteeDate|15/08/2014',
+       'Decisiondate|14/10/2014',
+       'Appealdate|18/06/2014'] }
 
   context "#get_details_page" do
     specify "should return the application details page" do
